@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Carousel from "../components/Carousel";
 import "../Style.css";
 import Axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup(){
     const mystyle={
@@ -10,6 +10,7 @@ export default function Signup(){
         fontFamily: "Montserrat",
         fontSize: "18px"
     }
+    const navigate = useNavigate();
     
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,10 +47,10 @@ export default function Signup(){
       const data={username:username,password:password,email:email,phone:phone,company:company};
       Axios.post("http://localhost:4000/recruiterRoute/signup",data)
       .then((res)=>{ 
-        console.log(res.status);
-        console.log(res.data.message);
         if (res.status === 200 && res.data.message === 'SignUp successful') {
           alert("SignUp successful");
+          console.log(res.data);
+          navigate('/recruiterPage',{ state: { recruiter: res.data.recruiter} });
         }else {
           alert("SignUp failed");
         }

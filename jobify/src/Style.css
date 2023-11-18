@@ -8,13 +8,13 @@
     box-sizing: border-box;
   }
   
-
+/* 
 body{
   background: #011313; 
   background: -webkit-linear-gradient(to right, #243e3c, #2b6363, #0c2918); 
   background: linear-gradient(to right,#42ADC5, #003846, #13252C);  
   height: 100%;
-}
+} */
 
 
 .register > * {

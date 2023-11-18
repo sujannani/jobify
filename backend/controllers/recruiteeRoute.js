@@ -5,21 +5,21 @@ const bcrypt=require("bcrypt");
 
 
 recruiteeRoute.post('/signup', async (req, res) => {
-    const {username,password,email,mobileNumber,qualification,institutionName,fieldName,graduationYear,workStatus,skills,resume,linkedinProfile} = req.body;
+    const {username,password,email,phone,qualification,institutionName,fieldName,graduationYear,workStatus,skills,resume,linkedinProfile} = req.body;
     try {
       const recruitee = await recruiteeSchema.findOne({$or: [{ username }, { email }],});
       if (recruitee) {
         return res.status(400).json({ message: "Exists" });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      recruiteeSchema.create({username,password: hashedPassword,email,mobileNumber,qualification,institutionName,fieldName,graduationYear,workStatus,skills,resume,linkedinProfile},(err,data)=>{
+      recruiteeSchema.create({username,password: hashedPassword,email,phone,qualification,institutionName,fieldName,graduationYear,workStatus,skills,resume,linkedinProfile},(err,data)=>{
         if(err){
             console.log(err);
             return err;
         }
         else{
             console.log("SignUp successful");
-            res.json({ message: 'SignUp successful' });
+            res.json({ message: 'SignUp successful',recruitee:data });
         }
     })
     } catch (error) {

@@ -3,10 +3,12 @@ import Carousel from "../components/Carousel";
 import { Stepper, Step, StepLabel, Button } from '@mui/material';
 import "../Style.css";
 import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['', '', ''];
 
 export default function SignupRecruitee() {
+  const navigate = useNavigate();
     const mystyle={
         color:"#2ba4e4",
         fontFamily: "Montserrat",
@@ -18,7 +20,7 @@ export default function SignupRecruitee() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [phone, setMobileNumber] = useState('');
 
   const [qualification, setQualification] = useState('');
   const [institutionName, setInstitutionName] = useState('');
@@ -79,8 +81,8 @@ const removeSkill = (skillToRemove) => {
         setEmailError(!email.trim());
         setPasswordError(!password.trim());
         setConfirmPasswordError(password !== confirmPassword || !confirmPassword.trim());
-        setMobileNumberError(!mobileNumber.trim());
-        if (!username || !email || !password || !confirmPassword || !mobileNumber || password !== confirmPassword) {
+        setMobileNumberError(!phone.trim());
+        if (!username || !email || !password || !confirmPassword || !phone || password !== confirmPassword) {
           alert('Please fill in all fields correctly before proceeding.');
           return;
         }
@@ -125,8 +127,8 @@ const removeSkill = (skillToRemove) => {
         setEmailError(!email.trim());
         setPasswordError(!password.trim());
         setConfirmPasswordError(password !== confirmPassword || !confirmPassword.trim());
-        setMobileNumberError(!mobileNumber.trim());
-        if (!username || !email || !password || password !== confirmPassword || !confirmPassword || !mobileNumber) {
+        setMobileNumberError(!phone.trim());
+        if (!username || !email || !password || password !== confirmPassword || !confirmPassword || !phone) {
           hasError = true;
         }
         break;
@@ -155,13 +157,12 @@ const removeSkill = (skillToRemove) => {
     if (hasError) {
       alert('Please fill in all fields correctly before proceeding.');
     } else {
-        const data={username:username,password:password,email:email,mobileNumber:mobileNumber,qualification:qualification,institutionName:institutionName,fieldName:fieldName,graduationYear:graduationYear,workStatus:workStatus,skills:skills,resume:resume,linkedinProfile:linkedinProfile};
+      const data={username:username,password:password,email:email,phone:phone,qualification:qualification,institutionName:institutionName,fieldName:fieldName,graduationYear:graduationYear,workStatus:workStatus,skills:skills,resume:resume,linkedinProfile:linkedinProfile};
       Axios.post("http://localhost:4000/recruiteeRoute/signup",data)
       .then((res)=>{
-        console.log(res.status);
-        console.log(res.data.message);
         if (res.status === 200 && res.data.message === 'SignUp successful') {
           alert("SignUp successful");
+          navigate('/recruiteePage',{ state: { recruitee: res.data.recruitee} });
         }else {
           alert("SignUp failed");
         }
@@ -239,7 +240,7 @@ const removeSkill = (skillToRemove) => {
                 type="tel"
                 className={`form-control ${mobileNumberError ? 'is-invalid' : ''}`}
                 placeholder="Type Your Mobile Number"
-                value={mobileNumber}
+                value={phone}
                 onChange={(e) => handleInputChange(e, setMobileNumber, setMobileNumberError)}
               />
             </div>

@@ -25,8 +25,8 @@ recruiterRoute.post('/signup', async (req, res) => {
             return err;
         }
         else{
-            console.log("SignUp successful", recruiter);
-            res.json({ message: 'SignUp successful' });
+            console.log("SignUp successful",data);
+            res.json({ message: 'SignUp successful',recruiter:data });
         }
     })
     } catch (error) {

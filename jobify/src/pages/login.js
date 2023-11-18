@@ -3,6 +3,7 @@ import image from '../assets/hi.svg';
 import '../Style.css';
 import Axios from 'axios';
 import Carousel from '../components/Carousel';
+import { useNavigate } from 'react-router-dom';
 
 export default function Form() {
   const mystyle = {
@@ -17,15 +18,15 @@ export default function Form() {
   };
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const loginRecruitee=()=>{
         const data={username:username,password:password};
         Axios.post("http://localhost:4000/recruiteeRoute/login",data)
         .then((res)=>{
-          console.log(res.status);
-          console.log(res.data.message);
           if (res.status === 200 && res.data.message === 'Login successful') {
             alert("Login successful");
+            navigate('/recruiteePage',{ state: { recruitee: res.data.recruitee} });
           } else {
             alert("login failed");
           }
@@ -39,6 +40,7 @@ export default function Form() {
           console.log(res.data.message);
           if (res.status === 200 && res.data.message === 'Login successful') {
             alert("Login successful");
+            navigate('/recruiterPage',{ state: { recruiter: res.data.recruiter} });
           } else {
             alert("Invalid Credentials");
           }
