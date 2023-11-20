@@ -128,7 +128,7 @@ recruiteeRoute.route("/applyJob/:id")
     }
     recruitee.jobsApplied.push({
       userId:formData.userId,
-      jobId:formData.recruitee,
+      jobId:formData.jobId,
     });
     const updatedRecruitee = await recruitee.save();
     res.status(200).json({
