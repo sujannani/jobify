@@ -362,7 +362,7 @@ const removeSkill = (skillToRemove) => {
                         <div className="mb-3">
                           <label className="form-label">Resume</label>
                           <input
-                            type="text"
+                            type="file"
                             className={`form-control ${resumeError ? 'is-invalid' : ''}`}
                             onChange={handleFileChange}
                           />
