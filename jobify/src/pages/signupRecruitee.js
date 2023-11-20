@@ -162,12 +162,11 @@ const removeSkill = (skillToRemove) => {
       .then((res)=>{
         if (res.status === 200 && res.data.message === 'SignUp successful') {
           alert("SignUp successful");
-          navigate('/recruiteePage',{ state: { recruitee: res.data.recruitee} });
+          navigate(`/recruiteePage/${res.data.recruitee._id}`,{ state: res.data.recruitee._id });
         }else {
           alert("SignUp failed");
         }
       }).catch((err)=>alert("Username already existed"))
-    //   alert('Form submitted successfully!');
     }
   };
   
@@ -363,7 +362,7 @@ const removeSkill = (skillToRemove) => {
                         <div className="mb-3">
                           <label className="form-label">Resume</label>
                           <input
-                            type="file"
+                            type="text"
                             className={`form-control ${resumeError ? 'is-invalid' : ''}`}
                             onChange={handleFileChange}
                           />

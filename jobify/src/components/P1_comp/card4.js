@@ -20,7 +20,7 @@ const applyJob = async ()=>{
           userId: recruitee,
         }).then((res)=>{
             if(res.status===200){
-                alert("success")
+                alert("Applied successfully");
             }
             else{
                 alert("failed");
@@ -30,6 +30,16 @@ const applyJob = async ()=>{
         console.error(error);
         console.log('Application failed');
       }
+      console.log(arr.hrId);
+      Axios.put(`http://localhost:4000/recruiterRoute/applicationsReceived/${arr.hrId}`,{jobId:arr._id,userId:recruitee,hrId:arr.hrId}).
+      then((res)=>{
+        if(res.status===200){
+
+        }
+        else{
+            alert("fail received");
+        }
+      }).catch((err)=>alert(err));
     applications.push({
         id:arr.id,
         img:info.dp,

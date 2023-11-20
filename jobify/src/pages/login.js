@@ -34,7 +34,7 @@ export default function Form() {
       }
   const loginRecruiter=()=>{
         const data={username:username,password:password};
-        Axios.post("http://localhost:4000/recruiterRoute/login",data)
+        Axios.post("http://localhost:4000/recruiterRoute/login",data) 
         .then((res)=>{
           console.log(res.status);
           console.log(res.data.message);

@@ -39,19 +39,15 @@ export default function Signup(){
     setPhoneError(!phone.trim());
     setCompanyError(!company.trim());
 
-    // Check if any field is empty
     if (!username.trim() || !password.trim() || !email.trim() || !phone.trim() || !company.trim()) {
       alert('Form contains errors. Please fill in all fields.');
-    } else {
-      // Your form submission logic here
+    } else { 
       const data={username:username,password:password,email:email,phone:phone,company:company};
       Axios.post("http://localhost:4000/recruiterRoute/signup",data)
       .then((res)=>{ 
         if (res.status === 200 && res.data.message === 'SignUp successful') {
           alert("SignUp successful");
-          console.log(res.data);
-          navigate('/recruiterPage',{ state: { recruiter: res.data.recruiter} });
-          // navigate('/profile');
+          navigate(`/recruiterPage/${res.data.recruiter._id}`,{state:res.data.recruiter._id});
         }else {
           alert("SignUp failed");
         }

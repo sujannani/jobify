@@ -11,9 +11,16 @@ const HrJobs = () => {
 
   const { state } = useLocation();
   const [recruiter, setRecruiter] = useState(null);
+  const [applications,setApplications]=useState([]);
+
+
+  useEffect(()=>{
+    Axios.get(`http://localhost:4000/recruiterRoute/recruiterPage/applicationsReceived/${state}`)
+    .then((res) => setApplications(res.data))
+    .catch((err) => alert(err));
+  },[])
 
   useEffect(() => {
-    console.log(state);
     Axios.get(`http://localhost:4000/recruiterRoute/recruiterPage/${state}`)
       .then((res) => setRecruiter(res.data))
       .catch((err) => alert(err));
@@ -65,6 +72,7 @@ const postJob = () => {
     });
 };
   return (
+    (applications)?
     <div>
       <div className='mb-5 pb-5'>
         <div className='my-5 py-3 pb-5 position-relative'>
@@ -126,12 +134,12 @@ const postJob = () => {
         <div className='my-5'>
           <div className='d-flex flex-wrap col-10 mx-auto gap-5 justify-content-between'>
             {filteredApplications.map((application, index) => (
-              <Application_card key={index} arr={application} />
+              <Application_card key={index} recruiter={recruiter} arr={application} />
             ))}
           </div>
         </div>
       </div>
-    </div>
+    </div>:<div>loading</div>
   )
 }
 

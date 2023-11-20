@@ -1,32 +1,43 @@
 import {React,useState} from 'react'
 import star from '../../Icon/star.svg'
 import { applications } from '../../pages/data';
+import pic from '../../assets/client1.svg'
+import Axios from 'axios';
 
-const Application_card = ({arr}) => {
+const Application_card = ({arr,recruiter}) => {
     const [status, setStatus] = useState('');
 
     const handleShortlist = () => {
         setStatus('shortlisted');
-        applications.map((app) => {
-        if (app.id === arr.id) {
-            app.status= 'shortlisted'
-        }});
+        // applications.map((app) => {
+        // if (app.id === arr.id) {
+        //     app.status= 'shortlisted'
+        // }});
     };
 
     const handleAccept = () => {
         setStatus('accepted');
-        applications.map((app) => {
-        if (app.id === arr.id) {
-            app.status= 'accepted'
-        }});
+        // applications.map((app) => {
+        // if (app.id === arr.id) {
+        //     app.status= 'accepted'
+        // }});
     };
 
     const handleReject = () => {
         setStatus('rejected');
-        applications.map((app) => {
-        if (app.id === arr.id) {
-            app.status= 'rejected'
-        }});
+        console.log(arr.jobId);
+        Axios.delete(`http://localhost:4000/recruiterRoute/applicationsReceived/${recruiter._id}`,{ data: { jobId: arr.jobId } }).then((res)=>{
+            if(res.status===200){
+                alert("Application Rejected")
+            }
+            else{
+                alert("not rejed")
+            }
+        }).catch((err)=>alert(err));
+        // applications.map((app) => {
+        // if (app.id === arr.id) {
+        //     app.status= 'rejected'
+        // }});
     };
     
   return (
@@ -34,9 +45,9 @@ const Application_card = ({arr}) => {
         <div className='d-flex flex-column gap-3'>
             {/* Info */}
             <div className='d-flex flex-row align-items-center gap-3'>
-                <img src={arr.img} className='img-fluid rounded-2'/>
+                <img src={pic} className='img-fluid rounded-2'/>
                 <div className='d-flex flex-column gap-1'>
-                    <h2 className='sub-head fw-bold text-primary'>{arr.name}</h2>
+                    <h2 className='sub-head fw-bold text-primary'>{arr.username}</h2>
                     {/* Stars */}
                     <div className='d-flex flex-row gap-1'>{Array.from({ length: arr.rating }, (_, index) => (
                         <img key={index} src={star} alt={`Star ${index + 1}`} />
@@ -46,7 +57,7 @@ const Application_card = ({arr}) => {
             </div>
             <div className='d-flex flex-column'>
                 <h2 className='sub-head fw-bold'>{arr.title}</h2>
-                <p className='body'>{arr.bio}</p>
+                <p className='body'>Versatile team player with strong initiative</p>
             </div>
         </div>
         {/* Buttons */}

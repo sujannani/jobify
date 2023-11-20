@@ -19,10 +19,14 @@ const recruiterSchema=new mongoose.Schema({
         "salary":{type:Number},
         "skills":{type:[String]},
         "description":{type:String},
+        "hrId":{type:String},
     }]},
     "applicationsReceived":{type:[{
+        "jobId":{type:String},
         "userId":{type:String},
-        "applicationId":{type:String}
+        "username":{type:String},
+        "title":{type:String},
+        "description":{type:String}
     }]}
 },{
     collection:"recruiters"
