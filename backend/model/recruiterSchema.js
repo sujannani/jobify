@@ -5,6 +5,12 @@ const recruiterSchema=new mongoose.Schema({
     "email":{type:String},
     "phone":{type:String},
     "company":{type:String},
+    "country":{type:String},
+    "state":{type:String},
+    "city":{type:String},
+    "accepted":{type:Number},
+    "rejected":{type:Number},
+    "shortlisted":{type:Number},
     "applicationsPosted":{type:[{
         "title":{type:String},
         "role":{type:String},
@@ -12,8 +18,7 @@ const recruiterSchema=new mongoose.Schema({
         "jobMode":{type:String},
         "salary":{type:Number},
         "skills":{type:[String]},
-        "jobDescription":{type:String},
-        "hrUsername":{type:String}
+        "description":{type:String},
     }]},
     "applicationsReceived":{type:[{
         "userId":{type:String},

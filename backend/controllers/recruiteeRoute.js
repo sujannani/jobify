@@ -2,6 +2,8 @@ const express=require("express");
 const recruiteeSchema=require("../model/recruiteeSchema.js");
 const recruiteeRoute=express.Router();
 const bcrypt=require("bcrypt");
+const mongoose=require("mongoose");
+const recruiterSchema = require("../model/recruiterSchema.js");
 
 
 recruiteeRoute.post('/signup', async (req, res) => {
@@ -58,43 +60,86 @@ recruiteeRoute.get("/",(req,res)=>{
 })
 
 
-// recruiteeRoute.route("/update-recruitee/:id")
-// .get((req,res)=>{
-//     recruiteeSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
-//         if(err){
-//             return err;
-//         }
-//         else{
-//             res.json(data);
-//         }
-//     })
-// }).put((req,res)=>{
-//     recruiteeSchema.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id),
-//     {$set:req.body},
-//     (err,data)=>{
-//         if(err){
-//             return err;
-//         }
-//         else{
-//             res.json(data);
-//         }
-//     }
-//     )
-// })
+recruiteeRoute.get("/recruiteePage/:id",(req,res)=>{
+  recruiteeSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+      if(err){
+          return err;
+      }
+      else{
+          res.json(data);
+      }
+  })
+})
 
-// recruiteeRoute.delete("/delete-recruitee/:id",(req,res)=>{
-//     recruiteeSchema.findByIdAndRemove(mongoose.Types.ObjectId(req.params.id),
-//     (err,data)=>{
-//         if(err){
-//             return err;
-//         }
-//         else{
-//             res.json(data);
-//         }
-//     }
-//     )
-// })
+recruiteeRoute.get("/recruiteePage/profile/:id",(req,res)=>{
+recruiteeSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+  if(err){
+      return err;
+  }
+  else{
+      res.json(data);
+  }
+})
+})
 
+
+recruiteeRoute.route("/profile/:id")
+.get((req,res)=>{
+    recruiteeSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+        if(err){
+            return err;
+        }
+        else{
+            res.json(data);
+        }
+    })
+}).put((req,res)=>{
+    recruiteeSchema.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id),
+    {$set:req.body},
+    (err,data)=>{
+        if(err){
+            return err;
+        }
+        else{
+          res.status(200).json({ message: 'Update Successful', data });
+        }
+    }
+    )
+})
+
+
+recruiteeRoute.route("/applyJob/:id")
+.get((req,res)=>{
+    recruiteeSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+        if(err){
+            return err;
+        }
+        else{
+            res.json(data);
+        }
+    })
+}).put(async (req, res) => {
+  const recruiteeId = req.params.id;
+  const formData = req.body;
+  try {
+    const recruitee = await recruiteeSchema.findById(recruiteeId);
+    if (!recruitee) {
+      return res.status(404).json({ message: 'Recruiter not found' });
+    }
+    recruitee.jobsApplied.push({
+      userId:formData.userId,
+      jobId:formData.recruitee,
+    });
+    const updatedRecruitee = await recruitee.save();
+    res.status(200).json({
+      message: 'Update Successful',
+      data: updatedRecruitee.jobsApplied,
+    });
+  } catch (error) {
+    console.error('Error during job posting:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 module.exports=recruiteeRoute;
 

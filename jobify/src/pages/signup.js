@@ -51,6 +51,7 @@ export default function Signup(){
           alert("SignUp successful");
           console.log(res.data);
           navigate('/recruiterPage',{ state: { recruiter: res.data.recruiter} });
+          // navigate('/profile');
         }else {
           alert("SignUp failed");
         }

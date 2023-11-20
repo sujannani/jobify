@@ -26,11 +26,11 @@ export default function Form() {
         .then((res)=>{
           if (res.status === 200 && res.data.message === 'Login successful') {
             alert("Login successful");
-            navigate('/recruiteePage',{ state: { recruitee: res.data.recruitee} });
+            navigate(`/recruiteePage/${res.data.recruitee._id}`,{ state: res.data.recruitee._id });
           } else {
             alert("login failed");
           }
-        }).catch((err)=>alert(err))
+        }).catch((err)=>alert("Invalid credentials"))
       }
   const loginRecruiter=()=>{
         const data={username:username,password:password};
@@ -40,11 +40,11 @@ export default function Form() {
           console.log(res.data.message);
           if (res.status === 200 && res.data.message === 'Login successful') {
             alert("Login successful");
-            navigate('/recruiterPage',{ state: { recruiter: res.data.recruiter} });
+            navigate(`/recruiterPage/${res.data.recruiter._id}`,{state:res.data.recruiter._id});
           } else {
             alert("Invalid Credentials");
           }
-        }).catch((err)=>alert(err))
+        }).catch((err)=>alert("Invalid credentials"))
       }
 
   return (

@@ -2,6 +2,7 @@ const express=require("express");
 const recruiterSchema=require("../model/recruiterSchema.js");
 const recruiterRoute=express.Router();
 const bcrypt=require('bcrypt');
+const mongoose=require("mongoose");
 
 recruiterRoute.get("/",(req,res)=>{
     recruiterSchema.find((err,data)=>{
@@ -11,6 +12,40 @@ recruiterRoute.get("/",(req,res)=>{
           res.json(data);
     })
 })
+
+recruiterRoute.get("/recruiterPage/:id",(req,res)=>{
+      recruiterSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+          if(err){
+              return err;
+          }
+          else{
+              res.json(data);
+          }
+      })
+  })
+
+  
+recruiterRoute.get("/recruiterPage/hrProfile/:id",(req,res)=>{
+  recruiterSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+      if(err){
+          return err;
+      }
+      else{
+          res.json(data);
+      }
+  })
+})
+
+recruiterRoute.get('/allRecruiterIds', async (req, res) => {
+  try {
+    const recruiterIds = await recruiterSchema.find({}, '_id');
+    console.log(recruiterIds);
+    res.status(200).json(recruiterIds);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 recruiterRoute.post('/signup', async (req, res) => {
     const {username,password,email,phone,company} = req.body;
@@ -54,6 +89,71 @@ recruiterRoute.post('/signup', async (req, res) => {
       res.status(500).json({ message: 'Internal server error'});
     }
   });
+
+
+  recruiterRoute.route("/jobs/:id")
+  .get((req,res)=>{
+      recruiterSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+          if(err){
+              return err;
+          }
+          else{
+              res.json(data);
+          }
+      })
+  }).put(async (req, res) => {
+    const recruiterId = req.params.id;
+    const formData = req.body;
+    try {
+      const recruiter = await recruiterSchema.findById(recruiterId);
+      if (!recruiter) {
+        return res.status(404).json({ message: 'Recruiter not found' });
+      }
+      recruiter.applicationsPosted.push({
+        title: formData.title,
+        role: formData.role,
+        location: formData.location,
+        jobMode: formData.jobMode,
+        salary: formData.salary,
+        skills: formData.skills.split(','), // Assuming skills are comma-separated
+        description: formData.jobDescription,
+      });
+      const updatedRecruiter = await recruiter.save();
+      res.status(200).json({
+        message: 'Update Successful',
+        data: updatedRecruiter.applicationsPosted,
+      });
+    } catch (error) {
+      console.error('Error during job posting:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
+
+
+  recruiterRoute.route("/hrprofile/:id")
+  .get((req,res)=>{
+      recruiterSchema.findById(mongoose.Types.ObjectId(req.params.id),(err,data)=>{
+          if(err){
+              return err;
+          }
+          else{
+              res.json(data);
+          }
+      })
+  }).put((req,res)=>{
+      recruiterSchema.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id),
+      {$set:req.body},
+      (err,data)=>{
+          if(err){
+              return err;
+          }
+          else{
+            res.status(200).json({ message: 'Update Successful', data });
+          }
+      }
+      )
+  })
 
 
 module.exports=recruiterRoute;

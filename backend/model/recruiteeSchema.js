@@ -12,17 +12,16 @@ const recruiteeSchema=new mongoose.Schema({
     "skills":{type:[String]},
     "resume":{type:Object},
     "linkedinProfile":{type:String},
+    "country":{type:String},
+    "state":{type:String},
+    "city":{type:String},
+    "rating":{type:Number},
+    "applied":{type:Number},
+    "shortlisted":{type:Number},
+    "rejected":{type:Number},
     "jobsApplied":{type:[{
-        "title":{type:String},
-        "role":{type:String},
-        "jobMode":{type:String},
-        "skills":{type:[String]},
-        "description":{type:String},
-        "location":{type:String},
-        "salary":{type:Number},
-        "company":{type:String},
-        "hrUsername":{type:String},
-        "jobId":{type:Number}
+        "jobId":{type:String},
+        "userId":{type:String},
     }]}
 },{
     collection:"recruitees"
